@@ -1,25 +1,23 @@
 {
   "name": "swoft/redis",
   "type": "library",
-  "keywords": ["php", "swoole", "swoft","view"],
+  "keywords": [
+    "php",
+    "swoole",
+    "swoft",
+    "view"
+  ],
   "description": "microservice framework base on swoole",
   "license": "apache2.0",
   "require": {
-    "phpseclib/phpseclib": "2.0.0",
-    "doctrine/annotations": "^1.4",
-    "php-di/phpdoc-reader": "^2.0",
-    "monolog/monolog": "^1.23",
-    "vlucas/phpdotenv": "^2.4",
-    "psr/http-message": "^1.0",
-    "psr/simple-cache": "^1.0.0",
-    "http-interop/http-server-middleware": "^1.0",
-    "zendframework/zend-mime": "^2.7"
+    "swoft/framework": "dev-component",
+    "swoft/cache": "dev-master"
   },
   "autoload": {
     "classmap": [
     ],
     "psr-4": {
-      "Swoft\\Redis\\":"src/"
+      "Swoft\\Redis\\": "src/"
     },
     "files": [
       "src/Helper/Functions.php"
@@ -27,14 +25,23 @@
   },
   "autoload-dev": {
     "psr-4": {
+      "Swoft\\Redis\\Test\\": "test"
     }
   },
-  "repositories": {
-    "packagist": {
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/swoft-cloud/framework"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/swoft-cloud/swoft-cache"
+    },
+    {
       "type": "composer",
       "url": "https://packagist.phpcomposer.com"
     }
-  },
+  ],
   "require-dev": {
     "eaglewu/swoole-ide-helper": "dev-master",
     "phpunit/phpunit": "^5.7"
