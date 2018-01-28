@@ -4,7 +4,7 @@ namespace Swoft\Redis;
 
 use Swoft\App;
 use Swoft\Helper\PhpHelper;
-use Swoft\Pool\AbstractConnectInterface;
+use Swoft\Pool\AbstractConnect;
 use Swoft\Redis\Exception\RedisException;
 use Swoole\Coroutine\Redis;
 
@@ -17,7 +17,7 @@ use Swoole\Coroutine\Redis;
  * @copyright Copyright 2010-2016 swoft software
  * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
  */
-class RedisConnect extends AbstractConnectInterface
+class RedisConnect extends AbstractConnect
 {
     /**
      * @var Redis

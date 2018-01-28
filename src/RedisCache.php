@@ -269,7 +269,7 @@ class RedisCache implements CacheInterface
      */
     private function call(string $method, array $params)
     {
-        /** @var \Swoft\Pool\ConnectPoolInterface $connectPool */
+        /** @var \Swoft\Pool\ConnectPool $connectPool */
         $connectPool = App::getBean(RedisPool::class);
         /* @var RedisConnect $client */
         $client = $connectPool->getConnect();

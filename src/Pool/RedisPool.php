@@ -5,7 +5,7 @@ namespace Swoft\Redis\Pool;
 use Swoft\App;
 use Swoft\Bean\Annotation\Inject;
 use Swoft\Bean\Annotation\Pool;
-use Swoft\Pool\ConnectPoolInterface;
+use Swoft\Pool\ConnectPool;
 use Swoft\Redis\RedisConnect;
 use Swoft\Redis\SyncRedisConnect;
 use Swoft\Redis\Pool\Config\RedisPoolConfig;
@@ -20,7 +20,7 @@ use Swoft\Redis\Pool\Config\RedisPoolConfig;
  * @copyright Copyright 2010-2016 Swoft software
  * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
  */
-class RedisPool extends ConnectPoolInterface
+class RedisPool extends ConnectPool
 {
     /**
      * the config of redis pool
