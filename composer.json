@@ -1,52 +1,52 @@
 {
-  "name": "swoft/redis",
-  "type": "library",
-  "keywords": [
-    "php",
-    "swoole",
-    "swoft",
-    "view"
-  ],
-  "description": "microservice framework base on swoole",
-  "license": "Apache-2.0",
-  "require": {
-    "swoft/framework": "dev-component",
-    "swoft/cache": "dev-master"
-  },
-  "autoload": {
-    "classmap": [
+    "name": "swoft/redis",
+    "type": "library",
+    "keywords": [
+        "php",
+        "swoole",
+        "swoft",
+        "redis"
     ],
-    "psr-4": {
-      "Swoft\\Redis\\": "src/"
+    "description": "Redis Component for Swoft",
+    "license": "Apache-2.0",
+    "require": {
+        "swoft/cache": "dev-master",
+        "swoft/framework": "dev-component"
     },
-    "files": [
-      "src/Helper/Functions.php"
-    ]
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Swoft\\Redis\\Test\\": "test"
+    "autoload": {
+        "classmap": [
+        ],
+        "psr-4": {
+            "Swoft\\Redis\\": "src/"
+        },
+        "files": [
+            "src/Helper/Functions.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Swoft\\Redis\\Test\\": "test"
+        }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/swoft-cloud/swoft-framework"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/swoft-cloud/swoft-cache"
+        },
+        {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
+    ],
+    "require-dev": {
+        "eaglewu/swoole-ide-helper": "dev-master",
+        "phpunit/phpunit": "^5.7"
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit -c phpunit.xml"
     }
-  },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/swoft-cloud/framework"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/swoft-cloud/swoft-cache"
-    },
-    {
-      "type": "composer",
-      "url": "https://packagist.phpcomposer.com"
-    }
-  ],
-  "require-dev": {
-    "eaglewu/swoole-ide-helper": "dev-master",
-    "phpunit/phpunit": "^5.7"
-  },
-  "scripts": {
-    "test": "./vendor/bin/phpunit -c phpunit.xml"
-  }
 }
