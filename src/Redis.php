@@ -6,17 +6,16 @@ use Swoft\App;
 use Swoft\Bean\Annotation\Bean;
 use Swoft\Cache\CacheCoResult;
 use Swoft\Cache\CacheDataResult;
-use Swoft\Cache\CacheInterface;
+use Swoft\Cache\DriverInterface;
 use Swoft\Core\ResultInterface;
 use Swoft\Pool\ConnectInterface;
 use Swoft\Pool\ConnectPool;
 use Swoft\Redis\Pool\RedisPool;
 
 /**
- * the cache of redis
+ * Redis
  *
  * key and string
- *
  * @method int append($key, $value)
  * @method int decr($key)
  * @method int decrBy($key, $value)
@@ -25,9 +24,7 @@ use Swoft\Redis\Pool\RedisPool;
  * @method int incrBy($key, $value)
  * @method float incrByFloat($key, $increment)
  * @method int strlen($key)
- *
  * hash
- *
  * @method int hSet($key, $hashKey, $value)
  * @method bool hSetNx($key, $hashKey, $value)
  * @method string hGet($key, $hashKey)
@@ -41,9 +38,7 @@ use Swoft\Redis\Pool\RedisPool;
  * @method bool hIncrByFloat($key, $field, $increment)
  * @method bool hMset($key, $hashKeys)
  * @method array hMGet($key, $hashKeys)
- *
  * list
- *
  * @method array brPop(array $keys, $timeout)
  * @method array blPop(array $keys, $timeout)
  * @method int lLen($key)
@@ -54,9 +49,7 @@ use Swoft\Redis\Pool\RedisPool;
  * @method bool lSet($key, $index, $value)
  * @method int rPush($key, $value1, $value2 = null, $valueN = null)
  * @method string rPop($key)
- *
  * set
- *
  * @method int sAdd($key, $value1, $value2 = null, $valueN = null)
  * @method array|bool scan(&$iterator, $pattern = null, $count = 0)
  * @method int sCard($key)
@@ -71,9 +64,7 @@ use Swoft\Redis\Pool\RedisPool;
  * @method int sRem($key, $member1, $member2 = null, $memberN = null)
  * @method array sUnion($key1, $key2, $keyN = null)
  * @method int sUnionStore($dstKey, $key1, $key2, $keyN = null)
- *
  * sort
- *
  * @method int zAdd($key, $score1, $value1, $score2 = null, $value2 = null, $scoreN = null, $valueN = null)
  * @method array zRange($key, $start, $end, $withscores = null)
  * @method int zRem($key, $member1, $member2 = null, $memberN = null)
@@ -89,30 +80,26 @@ use Swoft\Redis\Pool\RedisPool;
  * @method float zIncrBy($key, $value, $member)
  * @method int zUnion($Output, $ZSetKeys, array $Weights = null, $aggregateFunction = 'SUM')
  * @method int zInter($Output, $ZSetKeys, array $Weights = null, $aggregateFunction = 'SUM')
- *
  * pub/sub
- *
  * @method int publish($channel, $message)
  * @method string|array psubscribe($patterns, $callback)
  * @method string|array subscribe($channels, $callback)
  * @method array|int pubsub($keyword, $argument)
- *
  * script
- *
  * @method mixed eval($script, $args = array(), $numKeys = 0)
  * @method mixed evalSha($scriptSha, $args = array(), $numKeys = 0)
  * @method mixed script($command, $script)
  * @method string getLastError()
  * @method bool clearLastError()
- *
  * @Bean()
- * @uses      RedisCache
+ *
+ * @uses      Redis
  * @version   2017年12月24日
  * @author    stelin <phpcrazy@126.com>
  * @copyright Copyright 2010-2016 swoft software
  * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
  */
-class RedisCache implements CacheInterface
+class Redis implements DriverInterface
 {
 
     /**
@@ -120,7 +107,6 @@ class RedisCache implements CacheInterface
      *
      * @param string $key
      * @param mixed  $default
-     *
      * @return string|bool
      */
     public function get($key, $default = null)
@@ -139,13 +125,12 @@ class RedisCache implements CacheInterface
      * @param string $key
      * @param mixed  $value
      * @param int    $ttl
-     *
      * @return bool
      */
-    public function set($key, $value, $ttl = null)
+    public function set($key, $value, $ttl = null): bool
     {
         $ttl = $this->getTtl($ttl);
-        $params = ($ttl ==0)?[$key, $value]:[$key, $value, $ttl];
+        $params = ($ttl === 0) ? [$key, $value] : [$key, $value, $ttl];
         return $this->call('set', $params);
     }
 
@@ -153,10 +138,9 @@ class RedisCache implements CacheInterface
      * Remove specified keys.
      *
      * @param string $key
-     *
      * @return int Number of keys deleted.
      */
-    public function delete($key)
+    public function delete($key): int
     {
         return $this->call('del', [$key]);
     }
@@ -166,21 +150,19 @@ class RedisCache implements CacheInterface
      *
      * @return  bool  Always TRUE.
      */
-    public function clear()
+    public function clear(): bool
     {
         return $this->call('flushDB', []);
     }
 
     /**
      * Returns the values of all specified keys.
-     *
      * For every key that does not hold a string value or does not exist,
      * the special value false is returned. Because of this, the operation never fails.
      *
      * @param iterable $keys
      * @param mixed    $default
-     *
-     * @return array
+     * @return array|mixed
      */
     public function getMultiple($keys, $default = null)
     {
@@ -197,10 +179,9 @@ class RedisCache implements CacheInterface
      *
      * @param iterable $values
      * @param int      $ttl
-     *
      * @return bool TRUE in case of success, FALSE in case of failure.
      */
-    public function setMultiple($values, $ttl = null)
+    public function setMultiple($values, $ttl = null): bool
     {
         $result = $this->call('mset', [$values]);
         return $result;
@@ -210,10 +191,9 @@ class RedisCache implements CacheInterface
      * Remove specified keys.
      *
      * @param iterable $keys
-     *
      * @return int Number of keys deleted.
      */
-    public function deleteMultiple($keys)
+    public function deleteMultiple($keys): int
     {
         return $this->call('del', [$keys]);
     }
@@ -222,10 +202,9 @@ class RedisCache implements CacheInterface
      * Verify if the specified key exists.
      *
      * @param string $key
-     *
      * @return  bool  If the key exists, return TRUE, otherwise return FALSE.
      */
-    public function has($key)
+    public function has($key): bool
     {
         return $this->call('exists', [$key]);
     }
@@ -235,7 +214,6 @@ class RedisCache implements CacheInterface
      *
      * @param string $method
      * @param array  $params
-     *
      * @return ResultInterface
      */
     public function deferCall(string $method, array $params)
@@ -255,12 +233,11 @@ class RedisCache implements CacheInterface
      *
      * @param string $method
      * @param array  $arguments
-     *
      * @return mixed
      */
     public function __call($method, $arguments)
     {
-        return self::call($method, $arguments);
+        return $this->call($method, $arguments);
     }
 
     /**
@@ -268,7 +245,6 @@ class RedisCache implements CacheInterface
      *
      * @param string $method
      * @param array  $params
-     *
      * @return mixed
      */
     private function call(string $method, array $params)
@@ -292,7 +268,7 @@ class RedisCache implements CacheInterface
     private function getResult(ConnectPool $connectPool, ConnectInterface $connect, $result)
     {
         if (App::isCorContext()) {
-            return new CacheCoResult($connect, "", $connectPool);
+            return new CacheCoResult($connect, '', $connectPool);
         }
 
         return new CacheDataResult($result);
@@ -302,11 +278,10 @@ class RedisCache implements CacheInterface
      * the ttl
      *
      * @param $ttl
-     *
      * @return int
      */
-    private function getTtl($ttl)
+    private function getTtl($ttl): int
     {
-        return ($ttl == null) ? 0 : (int)$ttl;
+        return ($ttl === null) ? 0 : (int)$ttl;
     }
 }
