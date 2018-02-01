@@ -12,11 +12,6 @@ use Swoft\Pool\ProviderSelector;
  * the pool config of redis
  *
  * @Bean()
- * @uses      RedisPoolConfig
- * @version   2017年12月16日
- * @author    stelin <phpcrazy@126.com>
- * @copyright Copyright 2010-2016 swoft software
- * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
  */
 class RedisPoolConfig extends PoolProperties
 {
@@ -106,6 +101,22 @@ class RedisPoolConfig extends PoolProperties
      * @var int
      */
     protected $db = 0;
+
+    /**
+     * Whether to be serialized
+     *
+     * @Value(name="${config.cache.redis.serialize}", env="${REDIS_SERIALIZE}")
+     * @var int
+     */
+    protected $serialize = 0;
+
+    /**
+     * @return int
+     */
+    public function getSerialize(): int
+    {
+        return $this->serialize;
+    }
 
     /**
      * @return int

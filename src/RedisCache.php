@@ -4,8 +4,12 @@ namespace Swoft\Redis;
 
 use Swoft\App;
 use Swoft\Bean\Annotation\Bean;
+use Swoft\Cache\CacheCoResult;
+use Swoft\Cache\CacheDataResult;
 use Swoft\Cache\CacheInterface;
-use Swoft\Cache\CacheResult;
+use Swoft\Core\ResultInterface;
+use Swoft\Pool\ConnectInterface;
+use Swoft\Pool\ConnectPool;
 use Swoft\Redis\Pool\RedisPool;
 
 /**
@@ -232,7 +236,7 @@ class RedisCache implements CacheInterface
      * @param string $method
      * @param array  $params
      *
-     * @return \Swoft\Cache\CacheResult
+     * @return ResultInterface
      */
     public function deferCall(string $method, array $params)
     {
@@ -243,7 +247,7 @@ class RedisCache implements CacheInterface
         $client->setDefer();
         $result = $client->$method(...$params);
 
-        return new CacheResult($connectPool, $client, "", $result);
+        return $this->getResult($connectPool, $client, $result);
     }
 
     /**
@@ -277,6 +281,21 @@ class RedisCache implements CacheInterface
         $connectPool->release($client);
 
         return $result;
+    }
+
+    /**
+     * @param ConnectPool      $connectPool
+     * @param ConnectInterface $connect
+     * @param mixed            $result
+     * @return ResultInterface
+     */
+    private function getResult(ConnectPool $connectPool, ConnectInterface $connect, $result)
+    {
+        if (App::isCorContext()) {
+            return new CacheCoResult($connect, "", $connectPool);
+        }
+
+        return new CacheDataResult($result);
     }
 
     /**

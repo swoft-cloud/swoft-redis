@@ -44,6 +44,7 @@ class RedisPool extends ConnectPool
         }
 
         $dbIndex = $this->poolConfig->getDb();
+
         $redis->select($dbIndex);
 
         return $redis;

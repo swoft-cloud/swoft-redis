@@ -9,13 +9,7 @@ use Swoft\Redis\Exception\RedisException;
 use Swoole\Coroutine\Redis;
 
 /**
- * 协程Redis连接
- *
- * @uses      RedisConnect
- * @version   2017年09月28日
- * @author    stelin <phpcrazy@126.com>
- * @copyright Copyright 2010-2016 swoft software
- * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
+ * The connect of redis
  */
 class RedisConnect extends AbstractConnect
 {
@@ -34,9 +28,14 @@ class RedisConnect extends AbstractConnect
         $address = $this->connectPool->getConnectAddress();
         $config = $this->parseUri($address);
 
+        /* @var \Swoft\Redis\Pool\Config\RedisPoolConfig $poolConfig*/
+        $poolConfig = $this->connectPool->getPoolConfig();
+        $serialize = $poolConfig->getSerialize();
+        $serialize = ((int)$serialize == 0) ? false : true;
+
         // 创建连接
         $redis = new Redis();
-        $result = $redis->connect($config['host'], $config['port'], $timeout);
+        $result = $redis->connect($config['host'], $config['port'], $serialize);
         if ($result == false) {
             App::error("redis 连接失败，host=" . $config['host'] . " port=" . $config['port'] . " timeout=" . $timeout);
             return;
