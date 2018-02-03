@@ -146,8 +146,7 @@ class Redis implements CacheInterface
      */
     public function clear(): bool
     {
-        $this->call('flushDB', []);
-        return true;
+        return $this->call('flushDB', []);
     }
 
     /**
