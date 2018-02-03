@@ -15,7 +15,6 @@ use Swoft\Redis\Pool\RedisPool;
 /**
  * Redis
  * @Bean()
- *
  * key and string
  * @method int append($key, $value)
  * @method int decr($key)
@@ -160,11 +159,14 @@ class Redis implements CacheInterface
      */
     public function getMultiple($keys, $default = null)
     {
-        $result = $this->call('mget', [$keys]);
-        if ($result === false) {
+        $mgetResult = $this->call('mget', [$keys]);
+        if ($mgetResult === false) {
             return $default;
         }
-
+        $result = [];
+        foreach ($mgetResult ?? [] as $key => $value) {
+            $result[$keys[$key]] = $value;
+        }
         return $result;
     }
 
