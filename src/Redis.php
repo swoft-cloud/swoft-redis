@@ -187,11 +187,11 @@ class Redis implements CacheInterface
      * Remove specified keys.
      *
      * @param iterable $keys
-     * @return int Number of keys deleted.
+     * @return bool
      */
-    public function deleteMultiple($keys): int
+    public function deleteMultiple($keys): bool
     {
-        return $this->call('del', [$keys]);
+        return (bool)$this->call('del', [$keys]);
     }
 
     /**
