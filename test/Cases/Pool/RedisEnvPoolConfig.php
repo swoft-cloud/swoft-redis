@@ -1,6 +1,6 @@
 <?php
 
-namespace Swoft\Redis\Test\Testing\Pool;
+namespace SwoftTest\Redis\Pool;
 
 use Swoft\Bean\Annotation\Bean;
 use Swoft\Bean\Annotation\Value;

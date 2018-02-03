@@ -1,11 +1,10 @@
 <?php
 
-namespace Swoft\Redis\Test\Cases;
+namespace SwoftTest\Redis;
 
-use PHPUnit\Framework\TestCase;
 use Swoft\App;
-use Swoft\Redis\Test\Testing\Pool\RedisEnvPoolConfig;
-use Swoft\Redis\Test\Testing\Pool\RedisPptPoolConfig;
+use SwoftTest\Redis\Pool\RedisEnvPoolConfig;
+use SwoftTest\Redis\Pool\RedisPptPoolConfig;
 
 /**
  *
@@ -16,7 +15,7 @@ use Swoft\Redis\Test\Testing\Pool\RedisPptPoolConfig;
  * @copyright Copyright 2010-2016 swoft software
  * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
  */
-class PoolTest extends TestCase
+class PoolTest extends AbstractTestCase
 {
     public function testRedisPoolPpt()
     {
