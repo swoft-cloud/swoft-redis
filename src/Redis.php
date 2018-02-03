@@ -2,11 +2,11 @@
 
 namespace Swoft\Redis;
 
+use Psr\SimpleCache\CacheInterface;
 use Swoft\App;
 use Swoft\Bean\Annotation\Bean;
 use Swoft\Cache\CacheCoResult;
 use Swoft\Cache\CacheDataResult;
-use Swoft\Cache\DriverInterface;
 use Swoft\Core\ResultInterface;
 use Swoft\Pool\ConnectInterface;
 use Swoft\Pool\ConnectPool;
@@ -14,6 +14,7 @@ use Swoft\Redis\Pool\RedisPool;
 
 /**
  * Redis
+ * @Bean()
  *
  * key and string
  * @method int append($key, $value)
@@ -91,15 +92,8 @@ use Swoft\Redis\Pool\RedisPool;
  * @method mixed script($command, $script)
  * @method string getLastError()
  * @method bool clearLastError()
- * @Bean()
- *
- * @uses      Redis
- * @version   2017年12月24日
- * @author    stelin <phpcrazy@126.com>
- * @copyright Copyright 2010-2016 swoft software
- * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
  */
-class Redis implements DriverInterface
+class Redis implements CacheInterface
 {
 
     /**
