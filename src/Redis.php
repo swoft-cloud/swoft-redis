@@ -132,11 +132,11 @@ class Redis implements CacheInterface
      * Remove specified keys.
      *
      * @param string $key
-     * @return int Number of keys deleted.
+     * @return bool
      */
-    public function delete($key): int
+    public function delete($key): bool
     {
-        return $this->call('del', [$key]);
+        return (bool)$this->call('del', [$key]);
     }
 
     /**
