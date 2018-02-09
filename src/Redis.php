@@ -263,7 +263,7 @@ class Redis implements CacheInterface
      */
     private function getResult(ConnectPool $connectPool, ConnectInterface $connect, $result)
     {
-        if (App::isCorContext()) {
+        if (App::isCoContext()) {
             return new CacheCoResult($connect, '', $connectPool);
         }
 
