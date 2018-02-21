@@ -4,9 +4,9 @@ namespace SwoftTest\Redis\Pool;
 
 use Swoft\Bean\Annotation\Bean;
 use Swoft\Bean\Annotation\Value;
-use Swoft\Pool\BalancerSelector;
+use Swoft\Sg\BalancerSelector;
 use Swoft\Pool\PoolProperties;
-use Swoft\Pool\ProviderSelector;
+use Swoft\Sg\ProviderSelector;
 
 /**
  * the redis env config
