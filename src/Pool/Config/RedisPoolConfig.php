@@ -24,12 +24,12 @@ class RedisPoolConfig extends PoolProperties
     protected $name = "";
 
     /**
-     * the maximum number of idle connections
+     * Minimum active number of connections
      *
-     * @Value(name="${config.cache.redis.maxIdel}", env="${REDIS_MAX_IDEL}")
+     * @Value(name="${config.cache.redis.minActive}", env="${REDIS_MIN_ACTIVE}")
      * @var int
      */
-    protected $maxIdel = 6;
+    protected $minActive = 5;
 
     /**
      * the maximum number of active connections
@@ -37,7 +37,7 @@ class RedisPoolConfig extends PoolProperties
      * @Value(name="${config.cache.redis.maxActive}", env="${REDIS_MAX_ACTIVE}")
      * @var int
      */
-    protected $maxActive = 50;
+    protected $maxActive = 10;
 
     /**
      * the maximum number of wait connections
@@ -45,7 +45,23 @@ class RedisPoolConfig extends PoolProperties
      * @Value(name="${config.cache.redis.maxWait}", env="${REDIS_MAX_WAIT}")
      * @var int
      */
-    protected $maxWait = 100;
+    protected $maxWait = 20;
+
+    /**
+     * Maximum waiting time
+     *
+     * @Value(name="${config.cache.redis.maxWaitTime}", env="${REDIS_MAX_WAIT_TIME}")
+     * @var int
+     */
+    protected $maxWaitTime = 3;
+
+    /**
+     * Maximum idle time
+     *
+     * @Value(name="${config.cache.redis.maxIdleTime}", env="${REDIS_MAX_IDLE_TIME}")
+     * @var int
+     */
+    protected $maxIdleTime = 60;
 
     /**
      * the time of connect timeout
@@ -53,7 +69,7 @@ class RedisPoolConfig extends PoolProperties
      * @Value(name="${config.cache.redis.timeout}", env="${REDIS_TIMEOUT}")
      * @var int
      */
-    protected $timeout = 200;
+    protected $timeout = 3;
 
     /**
      * the addresses of connection
