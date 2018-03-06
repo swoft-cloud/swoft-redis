@@ -4,9 +4,7 @@ namespace Swoft\Redis\Pool\Config;
 
 use Swoft\Bean\Annotation\Bean;
 use Swoft\Bean\Annotation\Value;
-use Swoft\Sg\BalancerSelector;
 use Swoft\Pool\PoolProperties;
-use Swoft\Sg\ProviderSelector;
 
 /**
  * the pool config of redis
@@ -100,7 +98,7 @@ class RedisPoolConfig extends PoolProperties
      * @Value(name="${config.cache.redis.balancer}", env="${REDIS_BALANCER}")
      * @var string
      */
-    protected $balancer = BalancerSelector::TYPE_RANDOM;
+    protected $balancer = "";
 
     /**
      * the default provider is consul provider
@@ -108,7 +106,7 @@ class RedisPoolConfig extends PoolProperties
      * @Value(name="${config.cache.redis.provider}", env="${REDIS_PROVIDER}")
      * @var string
      */
-    protected $provider = ProviderSelector::TYPE_CONSUL;
+    protected $provider = "";
 
     /**
      * the index of redis db
