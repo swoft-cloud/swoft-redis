@@ -8,8 +8,8 @@ use Swoft\Bean\Annotation\Bean;
 use Swoft\Cache\CacheCoResult;
 use Swoft\Cache\CacheDataResult;
 use Swoft\Core\ResultInterface;
-use Swoft\Pool\ConnectInterface;
-use Swoft\Pool\ConnectPool;
+use Swoft\Pool\ConnectionInterface;
+use Swoft\Pool\PoolInterface;
 use Swoft\Redis\Pool\RedisPool;
 
 /**
@@ -100,6 +100,7 @@ class Redis implements CacheInterface
      *
      * @param string $key
      * @param mixed  $default
+     *
      * @return string|bool
      */
     public function get($key, $default = null)
@@ -118,12 +119,14 @@ class Redis implements CacheInterface
      * @param string $key
      * @param mixed  $value
      * @param int    $ttl
+     *
      * @return bool
      */
     public function set($key, $value, $ttl = null): bool
     {
-        $ttl = $this->getTtl($ttl);
+        $ttl    = $this->getTtl($ttl);
         $params = ($ttl === 0) ? [$key, $value] : [$key, $value, $ttl];
+
         return $this->call('set', $params);
     }
 
@@ -131,6 +134,7 @@ class Redis implements CacheInterface
      * Remove specified keys.
      *
      * @param string $key
+     *
      * @return bool
      */
     public function delete($key): bool
@@ -155,6 +159,7 @@ class Redis implements CacheInterface
      *
      * @param iterable $keys
      * @param mixed    $default
+     *
      * @return array|mixed
      */
     public function getMultiple($keys, $default = null)
@@ -167,6 +172,7 @@ class Redis implements CacheInterface
         foreach ($mgetResult ?? [] as $key => $value) {
             $result[$keys[$key]] = $value;
         }
+
         return $result;
     }
 
@@ -175,11 +181,13 @@ class Redis implements CacheInterface
      *
      * @param iterable $values
      * @param int      $ttl
+     *
      * @return bool TRUE in case of success, FALSE in case of failure.
      */
     public function setMultiple($values, $ttl = null): bool
     {
         $result = $this->call('mset', [$values]);
+
         return $result;
     }
 
@@ -187,6 +195,7 @@ class Redis implements CacheInterface
      * Remove specified keys.
      *
      * @param iterable $keys
+     *
      * @return bool
      */
     public function deleteMultiple($keys): bool
@@ -198,6 +207,7 @@ class Redis implements CacheInterface
      * Verify if the specified key exists.
      *
      * @param string $key
+     *
      * @return  bool  If the key exists, return TRUE, otherwise return FALSE.
      */
     public function has($key): bool
@@ -210,14 +220,15 @@ class Redis implements CacheInterface
      *
      * @param string $method
      * @param array  $params
+     *
      * @return ResultInterface
      */
     public function deferCall(string $method, array $params)
     {
         $connectPool = App::getPool(RedisPool::class);
 
-        /* @var $client RedisConnect */
-        $client = $connectPool->getConnect();
+        /* @var $client RedisConnection */
+        $client = $connectPool->getConnection();
         $client->setDefer();
         $result = $client->$method(...$params);
 
@@ -229,6 +240,7 @@ class Redis implements CacheInterface
      *
      * @param string $method
      * @param array  $arguments
+     *
      * @return mixed
      */
     public function __call($method, $arguments)
@@ -241,39 +253,42 @@ class Redis implements CacheInterface
      *
      * @param string $method
      * @param array  $params
+     *
      * @return mixed
      */
     private function call(string $method, array $params)
     {
-        /** @var \Swoft\Pool\ConnectPool $connectPool */
+        /** @var PoolInterface $connectPool */
         $connectPool = App::getBean(RedisPool::class);
-        /* @var RedisConnect $client */
-        $client = $connectPool->getConnect();
-        $result = $client->$method(...$params);
-        $connectPool->release($client);
+        /* @var ConnectionInterface $client */
+        $connection = $connectPool->getConnection();
+        $result = $connection->$method(...$params);
+        $connectPool->release($connection);
 
         return $result;
     }
 
     /**
-     * @param ConnectPool      $connectPool
-     * @param ConnectInterface $connect
-     * @param mixed            $result
+     * @param PoolInterface       $pool
+     * @param ConnectionInterface $connection
+     * @param mixed               $result
+     *
      * @return ResultInterface
      */
-    private function getResult(ConnectPool $connectPool, ConnectInterface $connect, $result)
+    private function getResult(PoolInterface $pool, ConnectionInterface $connection, $result)
     {
         if (App::isCoContext()) {
-            return new CacheCoResult($connect, '', $connectPool);
+            return new CacheCoResult($connection, '', $pool);
         }
 
-        return new CacheDataResult($result);
+        return new CacheDataResult($result, $connection, $pool);
     }
 
     /**
      * the ttl
      *
      * @param $ttl
+     *
      * @return int
      */
     private function getTtl($ttl): int

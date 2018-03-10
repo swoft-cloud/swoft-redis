@@ -5,25 +5,21 @@ namespace Swoft\Redis\Pool;
 use Swoft\App;
 use Swoft\Bean\Annotation\Inject;
 use Swoft\Bean\Annotation\Pool;
-use Swoft\Pool\ConnectPool;
-use Swoft\Redis\RedisConnect;
-use Swoft\Redis\SyncRedisConnect;
+use Swoft\Pool\ConnectionInterface;
+use Swoft\Pool\ConnectionPool;
+use Swoft\Redis\RedisConnection;
+use Swoft\Redis\SyncRedisConnection;
 use Swoft\Redis\Pool\Config\RedisPoolConfig;
 
 /**
- * redis连接池
+ * Redis pool
  *
  * @Pool()
- * @uses      RedisPool
- * @version   2017年05月11日
- * @author    stelin <phpcrazy@126.com>
- * @copyright Copyright 2010-2016 Swoft software
- * @license   PHP Version 7.x {@link http://www.php.net/license/3_0.txt}
  */
-class RedisPool extends ConnectPool
+class RedisPool extends ConnectionPool
 {
     /**
-     * the config of redis pool
+     * Config
      *
      * @Inject()
      * @var RedisPoolConfig
@@ -31,27 +27,21 @@ class RedisPool extends ConnectPool
     protected $poolConfig;
 
     /**
-     * 创建一个连接
+     * Create connection
      *
-     * @return RedisConnect|SyncRedisConnect
+     * @return ConnectionInterface
      */
-    public function createConnect()
+    public function createConnection(): ConnectionInterface
     {
-        if (App::isWorkerStatus()) {
-            $redis = new RedisConnect($this);
+        if (App::isCoContext()) {
+            $redis = new RedisConnection($this);
         } else {
-            $redis = new SyncRedisConnect($this);
+            $redis = new SyncRedisConnection($this);
         }
 
         $dbIndex = $this->poolConfig->getDb();
-
         $redis->select($dbIndex);
 
         return $redis;
-    }
-
-    public function reConnect($client)
-    {
-        list($host, $port) = $this->getConnectInfo();
     }
 }
