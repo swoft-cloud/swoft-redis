@@ -67,6 +67,18 @@ class RedisConnection extends AbstractConnection
     }
 
     /**
+     * @return mixed
+     */
+    public function receive()
+    {
+        $result = $this->connection->recv();
+        $this->connection->setDefer(false);
+        $this->recv = true;
+
+        return $result;
+    }
+
+    /**
      */
     public function reconnect()
     {
@@ -80,6 +92,7 @@ class RedisConnection extends AbstractConnection
      */
     public function setDefer($defer = true)
     {
+        $this->recv = false;
         $this->connection->setDefer($defer);
     }
 

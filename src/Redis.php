@@ -278,10 +278,10 @@ class Redis implements CacheInterface
     private function getResult(PoolInterface $pool, ConnectionInterface $connection, $result)
     {
         if (App::isCoContext()) {
-            return new CacheCoResult($connection, '', $pool);
+            return new CacheCoResult($connection, '');
         }
 
-        return new CacheDataResult($result, $connection, $pool);
+        return new CacheDataResult($result, $connection);
     }
 
     /**
