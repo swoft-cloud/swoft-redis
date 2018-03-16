@@ -64,6 +64,7 @@ use Swoft\Redis\Pool\RedisPool;
  * @method int sRem($key, $member1, $member2 = null, $memberN = null)
  * @method array sUnion($key1, $key2, $keyN = null)
  * @method int sUnionStore($dstKey, $key1, $key2, $keyN = null)
+ * @method int sismember($key, $value)
  * sort
  * @method int zAdd($key, $score1, $value1, $score2 = null, $value2 = null, $scoreN = null, $valueN = null)
  * @method array zRange($key, $start, $end, $withscores = null)
