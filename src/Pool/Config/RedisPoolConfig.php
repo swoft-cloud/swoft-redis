@@ -19,7 +19,7 @@ class RedisPoolConfig extends PoolProperties
      * @Value(name="${config.cache.redis.name}", env="${REDIS_NAME}")
      * @var string
      */
-    protected $name = "";
+    protected $name = '';
 
     /**
      * Minimum active number of connections
@@ -98,7 +98,7 @@ class RedisPoolConfig extends PoolProperties
      * @Value(name="${config.cache.redis.balancer}", env="${REDIS_BALANCER}")
      * @var string
      */
-    protected $balancer = "";
+    protected $balancer = '';
 
     /**
      * the default provider is consul provider
@@ -106,7 +106,7 @@ class RedisPoolConfig extends PoolProperties
      * @Value(name="${config.cache.redis.provider}", env="${REDIS_PROVIDER}")
      * @var string
      */
-    protected $provider = "";
+    protected $provider = '';
 
     /**
      * the index of redis db
@@ -115,6 +115,12 @@ class RedisPoolConfig extends PoolProperties
      * @var int
      */
     protected $db = 0;
+
+    /**
+     * @Value(name="${config.cache.redis.prefix}", env="${REDIS_PREFIX}")
+     * @var string
+     */
+    protected $prefix = '';
 
     /**
      * Whether to be serialized
@@ -138,5 +144,13 @@ class RedisPoolConfig extends PoolProperties
     public function getDb(): int
     {
         return $this->db;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrefix(): string
+    {
+        return $this->prefix;
     }
 }

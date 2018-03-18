@@ -7,7 +7,6 @@ use Swoft\Bean\Annotation\AfterReturning;
 use Swoft\Bean\Annotation\Aspect;
 use Swoft\Bean\Annotation\Before;
 use Swoft\Bean\Annotation\PointBean;
-use Swoft\Redis\Redis;
 use Swoft\Log\Log;
 
 /**

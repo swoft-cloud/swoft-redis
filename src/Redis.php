@@ -4,17 +4,16 @@ namespace Swoft\Redis;
 
 use Psr\SimpleCache\CacheInterface;
 use Swoft\App;
-use Swoft\Bean\Annotation\Bean;
 use Swoft\Cache\CacheCoResult;
 use Swoft\Cache\CacheDataResult;
 use Swoft\Core\ResultInterface;
 use Swoft\Pool\ConnectionInterface;
 use Swoft\Pool\PoolInterface;
 use Swoft\Redis\Pool\RedisPool;
+use Swoft\Redis\Pool\Config\RedisPoolConfig;
 
 /**
  * Redis
- * @Bean()
  * key and string
  * @method int append($key, $value)
  * @method int decr($key)
@@ -24,6 +23,8 @@ use Swoft\Redis\Pool\RedisPool;
  * @method int incrBy($key, $value)
  * @method float incrByFloat($key, $increment)
  * @method int strlen($key)
+ * @method array mget( array $array )
+ * @method bool mset( array $array )
  * hash
  * @method int hSet($key, $hashKey, $value)
  * @method bool hSetNx($key, $hashKey, $value)
@@ -94,6 +95,10 @@ use Swoft\Redis\Pool\RedisPool;
  */
 class Redis implements CacheInterface
 {
+    /**
+     * @var string
+     */
+    private $poolName = RedisPool::class;
 
     /**
      * Get the value related to the specified key
@@ -225,7 +230,7 @@ class Redis implements CacheInterface
      */
     public function deferCall(string $method, array $params)
     {
-        $connectPool = App::getPool(RedisPool::class);
+        $connectPool = App::getPool($this->poolName);
 
         /* @var $client RedisConnection */
         $client = $connectPool->getConnection();
@@ -258,8 +263,8 @@ class Redis implements CacheInterface
      */
     private function call(string $method, array $params)
     {
-        /** @var PoolInterface $connectPool */
-        $connectPool = App::getBean(RedisPool::class);
+        /* @var PoolInterface $connectPool */
+        $connectPool = App::getPool($this->poolName);
         /* @var ConnectionInterface $client */
         $connection = $connectPool->getConnection();
         $result = $connection->$method(...$params);
