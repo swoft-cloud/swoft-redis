@@ -130,6 +130,12 @@ class RedisConnection extends AbstractConnection
      */
     public function __call($method, $arguments)
     {
+        /* @var RedisCommandProvider $commandProvider */
+        $commandProvider = App::getBean(RedisCommandProvider::class);
+        $command         = $commandProvider->createCommand($method, $arguments);
+        $arguments       = $command->getArguments();
+        $method          = $command->getId();
+
         return PhpHelper::call([$this->connection, $method], $arguments);
     }
 }
