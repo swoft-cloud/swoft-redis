@@ -6,6 +6,7 @@ use Swoft\App;
 use Swoft\Helper\PhpHelper;
 use Swoft\Pool\AbstractConnection;
 use Swoft\Redis\Exception\RedisException;
+use Swoft\Redis\Profile\RedisCommandProvider;
 use Swoole\Coroutine\Redis;
 use \Swoft\Redis\Pool\Config\RedisPoolConfig;
 

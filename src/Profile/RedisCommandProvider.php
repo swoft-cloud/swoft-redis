@@ -136,7 +136,6 @@ class RedisCommandProvider extends RedisProfile
             'ZREMRANGEBYSCORE'    => '\Swoft\Redis\Operator\ZSets\ZSetRemoveRangeByScore',
             'ZDELETERANGEBYSCORE' => '\Swoft\Redis\Operator\ZSets\ZSetRemoveRangeByScore',
             /* ---------------- Redis 2.0 ---------------- */
-            //            'ZUNION'              => '\Swoft\Redis\Operator\ZSets\ZSetUnion',
             'ZCOUNT'              => '\Swoft\Redis\Operator\ZSets\ZSetCount',
             'ZRANK'               => '\Swoft\Redis\Operator\ZSets\ZSetRank',
             'ZREVRANK'            => '\Swoft\Redis\Operator\ZSets\ZSetReverseRank',
@@ -162,6 +161,8 @@ class RedisCommandProvider extends RedisProfile
             'HKEYS'               => '\Swoft\Redis\Operator\Hashes\HashKeys',
             'HVALS'               => '\Swoft\Redis\Operator\Hashes\HashValues',
             'HGETALL'             => '\Swoft\Redis\Operator\Hashes\HashGetAll',
+            /* ---------------- Redis 2.6 ---------------- */
+            'HINCRBYFLOAT'        => '\Swoft\Redis\Operator\Hashes\HashIncrByFloat',
 
             /* remote server control commands */
             /* ---------------- Redis 1.2 ---------------- */
@@ -174,6 +175,21 @@ class RedisCommandProvider extends RedisProfile
             'BGREWRITEAOF'        => '\Swoft\Redis\Operator\Servers\ServerBackgroundRewriteAOF',
             /* ---------------- Redis 2.6 ---------------- */
             'TIME'                => '\Swoft\Redis\Operator\Servers\ServerTime',
+            'EVAL'                => '\Swoft\Redis\Operator\Servers\ServerEval',
+            'EVALSHA'             => '\Swoft\Redis\Operator\Servers\ServerEvalSHA',
+
+            /* remote transaction commands */
+            /* ---------------- Redis 1.2 ---------------- */
+            'EXEC'                => '\Swoft\Redis\Operator\Transactions\TransExec',
+            'MULTI'               => '\Swoft\Redis\Operator\Transactions\TransMulti',
+            'WATCH'               => '\Swoft\Redis\Operator\Transactions\TransWatch',
+            'UNWATCH'             => '\Swoft\Redis\Operator\Transactions\TransUnWatch',
+
+            /* remote pub/sub commands */
+            /* ---------------- Redis 2.0 ---------------- */
+            'PUBLISH'             => '\Swoft\Redis\Operator\PubSubs\PubSubPublish',
+            'SUBSCRIBE'           => '\Swoft\Redis\Operator\PubSubs\PubSubSubscribe',
+            'PSUBSCRIBE'          => '\Swoft\Redis\Operator\PubSubs\PubSubPSubscribe',
         ];
     }
 }

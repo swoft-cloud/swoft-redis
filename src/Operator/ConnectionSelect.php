@@ -11,6 +11,6 @@ class ConnectionSelect extends Command
      */
     public function getId()
     {
-        return 'SELECT';
+        return 'select';
     }
 }

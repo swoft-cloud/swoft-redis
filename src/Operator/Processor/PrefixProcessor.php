@@ -96,8 +96,6 @@ class PrefixProcessor implements ProcessorInterface
             'SUBSTR'            => 'static::first',
             'BLPOP'             => 'static::skipLast',
             'BRPOP'             => 'static::skipLast',
-            'ZUNIONSTORE'       => 'static::zsetStore',
-            'ZINTERSTORE'       => 'static::zsetStore',
             'ZCOUNT'            => 'static::first',
             'ZRANK'             => 'static::first',
             'ZREVRANK'          => 'static::first',
@@ -115,9 +113,7 @@ class PrefixProcessor implements ProcessorInterface
             'HVALS'             => 'static::first',
             'HGETALL'           => 'static::first',
             'SUBSCRIBE'         => 'static::all',
-            'UNSUBSCRIBE'       => 'static::all',
             'PSUBSCRIBE'        => 'static::all',
-            'PUNSUBSCRIBE'      => 'static::all',
             'PUBLISH'           => 'static::first',
             /* ---------------- Redis 2.2 ---------------- */
             'PERSIST'           => 'static::first',
@@ -143,28 +139,9 @@ class PrefixProcessor implements ProcessorInterface
             'HINCRBYFLOAT'      => 'static::first',
             'EVAL'              => 'static::evalKeys',
             'EVALSHA'           => 'static::evalKeys',
-            'MIGRATE'           => 'static::migrate',
             /* ---------------- Redis 2.8 ---------------- */
-            'SSCAN'             => 'static::first',
-            'ZSCAN'             => 'static::first',
-            'HSCAN'             => 'static::first',
-            'PFADD'             => 'static::first',
-            'PFCOUNT'           => 'static::all',
-            'PFMERGE'           => 'static::all',
-            'ZLEXCOUNT'         => 'static::first',
             'ZRANGEBYLEX'       => 'static::first',
-            'ZREMRANGEBYLEX'    => 'static::first',
             'ZREVRANGEBYLEX'    => 'static::first',
-            'BITPOS'            => 'static::first',
-            /* ---------------- Redis 3.2 ---------------- */
-            'HSTRLEN'           => 'static::first',
-            'BITFIELD'          => 'static::first',
-            'GEOADD'            => 'static::first',
-            'GEOHASH'           => 'static::first',
-            'GEOPOS'            => 'static::first',
-            'GEODIST'           => 'static::first',
-            'GEORADIUS'         => 'static::georadius',
-            'GEORADIUSBYMEMBER' => 'static::georadius',
         );
     }
 
@@ -401,48 +378,6 @@ class PrefixProcessor implements ProcessorInterface
 
             for ($i = 2; $i < $length; ++$i) {
                 $arguments[$i] = "$prefix{$arguments[$i]}";
-            }
-
-            $command->setRawArguments($arguments);
-        }
-    }
-
-    /**
-     * Applies the specified prefix to the key of a MIGRATE command.
-     *
-     * @param CommandInterface $command Command instance.
-     * @param string           $prefix  Prefix string.
-     */
-    public static function migrate(CommandInterface $command, $prefix)
-    {
-        if ($arguments = $command->getArguments()) {
-            $arguments[2] = "$prefix{$arguments[2]}";
-            $command->setRawArguments($arguments);
-        }
-    }
-
-    /**
-     * Applies the specified prefix to the key of a GEORADIUS command.
-     *
-     * @param CommandInterface $command Command instance.
-     * @param string           $prefix  Prefix string.
-     */
-    public static function georadius(CommandInterface $command, $prefix)
-    {
-        if ($arguments = $command->getArguments()) {
-            $arguments[0] = "$prefix{$arguments[0]}";
-            $startIndex   = $command->getId() === 'GEORADIUS' ? 5 : 4;
-
-            if (($count = count($arguments)) > $startIndex) {
-                for ($i = $startIndex; $i < $count; ++$i) {
-                    switch (strtoupper($arguments[$i])) {
-                        case 'STORE':
-                        case 'STOREDIST':
-                            $arguments[$i] = "$prefix{$arguments[++$i]}";
-                            break;
-
-                    }
-                }
             }
 
             $command->setRawArguments($arguments);

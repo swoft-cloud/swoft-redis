@@ -11,6 +11,6 @@ class ConnectionPing extends Command
      */
     public function getId()
     {
-        return 'PING';
+        return 'ping';
     }
 }

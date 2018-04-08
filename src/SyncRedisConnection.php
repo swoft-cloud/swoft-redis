@@ -2,8 +2,10 @@
 
 namespace Swoft\Redis;
 
+use Swoft\App;
 use Swoft\Helper\PhpHelper;
 use Swoft\Pool\AbstractConnection;
+use Swoft\Redis\Profile\RedisCommandProvider;
 
 /**
  * Sync redis connection
@@ -63,6 +65,12 @@ class SyncRedisConnection extends AbstractConnection
      */
     public function __call($method, $arguments)
     {
+        /* @var RedisCommandProvider $commandProvider */
+        $commandProvider = App::getBean(RedisCommandProvider::class);
+        $command         = $commandProvider->createCommand($method, $arguments);
+        $arguments       = $command->getArguments();
+        $method          = $command->getId();
+
         return PhpHelper::call([$this->connection, $method], $arguments);
     }
 }
