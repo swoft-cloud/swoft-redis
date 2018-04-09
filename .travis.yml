@@ -8,10 +8,6 @@ services:
     - redis
 
 before_install:
-    - apt-get update
-    - apt-get install -y curl wget git zip libz-dev libssl-dev libnghttp2-dev \
-    - apt-get clean
-    - apt-get autoremove
     - echo "extension = swoole.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
 
 install:
@@ -22,7 +18,7 @@ install:
   - rm swoole.tar.gz
   - cd swoole
   - phpize
-  - ./configure --enable-async-redis --enable-mysqlnd --enable-coroutine --enable-openssl --enable-http2
+  - ./configure --enable-async-redis --enable-coroutine
   - make -j$(nproc)
   - make install
   - rm -r swoole
