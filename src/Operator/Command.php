@@ -4,7 +4,6 @@ namespace Swoft\Redis\Operator;
 
 abstract class Command implements CommandInterface
 {
-    private $slot;
     private $arguments = array();
 
     /**
@@ -25,7 +24,6 @@ abstract class Command implements CommandInterface
     public function setArguments(array $arguments)
     {
         $this->arguments = $this->filterArguments($arguments);
-        unset($this->slot);
     }
 
     /**
@@ -34,7 +32,6 @@ abstract class Command implements CommandInterface
     public function setRawArguments(array $arguments)
     {
         $this->arguments = $arguments;
-        unset($this->slot);
     }
 
     /**
@@ -52,24 +49,6 @@ abstract class Command implements CommandInterface
     {
         if (isset($this->arguments[$index])) {
             return $this->arguments[$index];
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setSlot($slot)
-    {
-        $this->slot = $slot;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSlot()
-    {
-        if (isset($this->slot)) {
-            return $this->slot;
         }
     }
 

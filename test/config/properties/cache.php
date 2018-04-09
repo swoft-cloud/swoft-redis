@@ -14,7 +14,7 @@ return [
         'timeout'     => 8,
         'db'          => 2,
         'prefix'      => 'redis_',
-        'serialize'   => 0,
+        'serialize'   => 1,
     ],
     'demoRedis' => [
         'db'     => 2,

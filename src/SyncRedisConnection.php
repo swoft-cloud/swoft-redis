@@ -26,9 +26,17 @@ class SyncRedisConnection extends AbstractConnection
         $address = $this->pool->getConnectionAddress();
         list($host, $port) = explode(":", $address);
 
+        /* @var RedisPoolConfig $poolConfig */
+        $poolConfig = $this->pool->getPoolConfig();
+        $serialize  = $poolConfig->getSerialize();
+        $serialize  = ((int)$serialize == 0) ? false : true;
+
         // init
         $redis = new \Redis();
         $redis->connect($host, $port, $timeout);
+        if ($serialize) {
+            $redis->setOption(\Redis::OPT_SERIALIZER, \Redis::SERIALIZER_PHP);
+        }
         $this->connection = $redis;
     }
 
