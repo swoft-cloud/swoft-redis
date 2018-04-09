@@ -21,7 +21,6 @@ install:
   - ./configure --enable-async-redis --enable-coroutine
   - make -j$(nproc)
   - make install
-  - rm -r swoole
   - echo 'no' | pecl install -f redis
 
 before_script:
