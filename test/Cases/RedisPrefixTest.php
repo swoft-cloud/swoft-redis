@@ -227,11 +227,15 @@ class RedisPrefixTest extends AbstractTestCase
 
             $result = $this->redis->sMembers($key1);
 
-            $this->assertArraySubset($result, $expect1);
+            foreach ($result as $value) {
+                $this->assertContains($value, $expect1);
+            }
 
             $result = $this->redis->sMembers($key2);
 
-            $this->assertArraySubset($result, $expect2);
+            foreach ($result as $value) {
+                $this->assertContains($value, $expect2);
+            }
 
             $this->delsadd($key1, $key2);
         });
