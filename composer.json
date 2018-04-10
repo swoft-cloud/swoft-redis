@@ -35,6 +35,7 @@
         }
     ],
     "require-dev": {
+        "swoft/service-governance": "^1.0",
         "eaglewu/swoole-ide-helper": "dev-master",
         "phpunit/phpunit": "^5.7"
     },
