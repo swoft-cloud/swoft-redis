@@ -2,10 +2,9 @@
 
 namespace Swoft\Redis;
 
-use Swoft\App;
 use Swoft\Helper\PhpHelper;
 use Swoft\Pool\AbstractConnection;
-use Swoft\Redis\Profile\RedisCommandProvider;
+use Swoft\Redis\Pool\Config\RedisPoolConfig;
 
 /**
  * Sync redis connection
@@ -30,6 +29,7 @@ class SyncRedisConnection extends AbstractConnection
         $poolConfig = $this->pool->getPoolConfig();
         $serialize  = $poolConfig->getSerialize();
         $serialize  = ((int)$serialize == 0) ? false : true;
+        $prefix = $poolConfig->getPrefix();
 
         // init
         $redis = new \Redis();
@@ -37,6 +37,11 @@ class SyncRedisConnection extends AbstractConnection
         if ($serialize) {
             $redis->setOption(\Redis::OPT_SERIALIZER, \Redis::SERIALIZER_PHP);
         }
+        if($prefix !== '' && is_string($prefix))
+        {
+            $redis->setOption(\Redis::OPT_PREFIX, $prefix);
+        }
+
         $this->connection = $redis;
     }
 
@@ -73,12 +78,6 @@ class SyncRedisConnection extends AbstractConnection
      */
     public function __call($method, $arguments)
     {
-        /* @var RedisCommandProvider $commandProvider */
-        $commandProvider = App::getBean(RedisCommandProvider::class);
-        $command         = $commandProvider->createCommand($method, $arguments);
-        $arguments       = $command->getArguments();
-        $method          = $command->getId();
-
         return PhpHelper::call([$this->connection, $method], $arguments);
     }
 }
