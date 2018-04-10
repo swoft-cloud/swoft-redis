@@ -23,7 +23,6 @@ install:
   - make install
   - echo 'no' | pecl install -f redis
   - cd -
-  - pwd
 
 before_script:
   - composer update
