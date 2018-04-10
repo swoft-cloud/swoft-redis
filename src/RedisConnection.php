@@ -6,7 +6,7 @@ use Swoft\App;
 use Swoft\Helper\PhpHelper;
 use Swoft\Pool\AbstractConnection;
 use Swoft\Redis\Exception\RedisException;
-use Swoole\Coroutine\Redis;
+use Swoole\Coroutine\Redis as CoRedis;
 use \Swoft\Redis\Pool\Config\RedisPoolConfig;
 
 /**
@@ -36,7 +36,7 @@ class RedisConnection extends AbstractConnection
         $serialize  = ((int)$serialize == 0) ? false : true;
 
         // create
-        $redis  = new Redis();
+        $redis  = new CoRedis();
         $host   = $config['host'];
         $port   = (int)$config['port'];
         $result = $redis->connect($host, $port, $serialize);
