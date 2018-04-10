@@ -4,6 +4,7 @@ namespace Swoft\Redis;
 
 use Swoft\Helper\PhpHelper;
 use Swoft\Pool\AbstractConnection;
+use Swoft\Redis\Pool\Config\RedisPoolConfig;
 
 /**
  * Sync redis connection
@@ -24,9 +25,23 @@ class SyncRedisConnection extends AbstractConnection
         $address = $this->pool->getConnectionAddress();
         list($host, $port) = explode(":", $address);
 
+        /* @var RedisPoolConfig $poolConfig */
+        $poolConfig = $this->pool->getPoolConfig();
+        $serialize  = $poolConfig->getSerialize();
+        $serialize  = ((int)$serialize == 0) ? false : true;
+        $prefix = $poolConfig->getPrefix();
+
         // init
         $redis = new \Redis();
         $redis->connect($host, $port, $timeout);
+        if ($serialize) {
+            $redis->setOption(\Redis::OPT_SERIALIZER, \Redis::SERIALIZER_PHP);
+        }
+        if($prefix !== '' && is_string($prefix))
+        {
+            $redis->setOption(\Redis::OPT_PREFIX, $prefix);
+        }
+
         $this->connection = $redis;
     }
 

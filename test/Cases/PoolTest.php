@@ -21,35 +21,34 @@ class PoolTest extends AbstractTestCase
     {
         /* @var \Swoft\Pool\PoolProperties $pConfig */
         $pConfig = App::getBean(RedisPptPoolConfig::class);
-        $this->assertEquals($pConfig->getName(), 'redis1');
-        $this->assertEquals($pConfig->getProvider(), 'consul1');
-        $this->assertEquals($pConfig->getTimeout(), 1);
+        $this->assertEquals($pConfig->getName(), 'redis');
         $this->assertEquals($pConfig->getUri(), [
-            '127.0.0.1:1111',
-            '127.0.0.1:1111',
+            '127.0.0.1:6379',
+            '127.0.0.1:6379',
         ]);
-        $this->assertEquals($pConfig->getBalancer(), 'random1');
-        $this->assertEquals($pConfig->getMaxActive(), 1);
-        $this->assertEquals($pConfig->getMaxIdel(), 1);
-        $this->assertEquals($pConfig->isUseProvider(), true);
-        $this->assertEquals($pConfig->getMaxWait(), 1);
+        $this->assertEquals($pConfig->getMaxActive(), 8);
+        $this->assertEquals($pConfig->getMaxWait(), 8);
+        $this->assertEquals($pConfig->getMaxWaitTime(), 3);
+        $this->assertEquals($pConfig->getMaxIdleTime(), 60);
+        $this->assertEquals($pConfig->getTimeout(), 8);
     }
 
     public function testRedisPoolEnv()
     {
         /* @var \Swoft\Pool\PoolProperties $pConfig */
         $pConfig = App::getBean(RedisEnvPoolConfig::class);
-        $this->assertEquals($pConfig->getName(), 'redis2');
-        $this->assertEquals($pConfig->getProvider(), 'consul2');
-        $this->assertEquals($pConfig->getTimeout(), 2);
+        $this->assertEquals($pConfig->getName(), 'redis');
+        $this->assertEquals($pConfig->getProvider(), 'consul');
+        $this->assertEquals($pConfig->getTimeout(), 3);
         $this->assertEquals($pConfig->getUri(), [
-            '127.0.0.1:2222',
-            '127.0.0.1:2222',
+            '127.0.0.1:6379',
+            '127.0.0.1:6379',
         ]);
-        $this->assertEquals($pConfig->getBalancer(), 'random2');
-        $this->assertEquals($pConfig->getMaxActive(), 2);
-        $this->assertEquals($pConfig->getMaxIdel(), 2);
-        $this->assertEquals($pConfig->isUseProvider(), true);
-        $this->assertEquals($pConfig->getMaxWait(), 2);
+        $this->assertEquals($pConfig->getBalancer(), 'random');
+        $this->assertEquals($pConfig->getMaxActive(), 10);
+        $this->assertEquals($pConfig->getMaxWait(), 20);
+        $this->assertEquals($pConfig->getMaxWaitTime(), 3);
+        $this->assertEquals($pConfig->getMaxIdleTime(), 60);
+        $this->assertEquals($pConfig->getTimeout(), 3);
     }
 }
