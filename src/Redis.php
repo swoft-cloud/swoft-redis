@@ -238,7 +238,7 @@ class Redis implements CacheInterface
         $client->setDefer();
         $result = $client->$method(...$params);
 
-        return $this->getResult($connectPool, $client, $result);
+        return $this->getResult($client, $result);
     }
 
     /**
@@ -269,22 +269,21 @@ class Redis implements CacheInterface
         /* @var ConnectionInterface $client */
         $connection = $connectPool->getConnection();
         $result = $connection->$method(...$params);
-        $connectPool->release($connection);
+        $connection->release(true);
 
         return $result;
     }
 
     /**
-     * @param PoolInterface       $pool
      * @param ConnectionInterface $connection
      * @param mixed               $result
      *
      * @return ResultInterface
      */
-    private function getResult(PoolInterface $pool, ConnectionInterface $connection, $result)
+    private function getResult(ConnectionInterface $connection, $result)
     {
         if (App::isCoContext()) {
-            return new CacheCoResult($connection, '');
+            return new CacheCoResult($result, $connection);
         }
 
         return new CacheDataResult($result, $connection);
