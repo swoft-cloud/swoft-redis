@@ -23,6 +23,8 @@ use Swoft\Redis\Pool\RedisPool;
  * Redis
  * key and string
  * @method int append($key, $value)
+ * @method bool setex($key, $ttl, $value)
+ * @method bool setnx($key, $value)
  * @method int decr($key)
  * @method int decrBy($key, $value)
  * @method string getRange($key, $start, $end)
