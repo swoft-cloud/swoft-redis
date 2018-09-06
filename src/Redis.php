@@ -186,19 +186,23 @@ class Redis implements CacheInterface
         return $result;
     }
 
-    /**
+     /**
      * Sets multiple key-value pairs in one atomic command.
      *
      * @param iterable $values
      * @param int      $ttl
      *
-     * @return bool TRUE in case of success, FALSE in case of failure.
+     * @return void
      */
-    public function setMultiple($values, $ttl = null): bool
+    public function setMultiple($values, $ttl = null)
     {
-        $result = $this->call('mset', [$values]);
+        $this->call('MULTI', []);
+        
+        foreach ($values as $key => $value) {
+            $this->set($key, $value, $ttl);
+        }
 
-        return $result;
+        $this->call('EXEC', []);
     }
 
     /**
