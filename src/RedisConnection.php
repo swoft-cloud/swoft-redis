@@ -33,10 +33,6 @@ class RedisConnection extends AbstractRedisConnection
     {
         $redis            = $this->initRedis();
         $this->connection = $redis;
-
-        /** @var RedisPoolConfig $config */
-        $config = $this->getPool()->getPoolConfig();
-        $redis->select($config->getDb());
     }
 
     /**

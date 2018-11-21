@@ -21,14 +21,10 @@ class HashGetMultiple extends Command
      */
     public function parseResponse($data)
     {
-        if ($data === false) {
-            return false;
-        }
-
         $result = [];
         $hashKeys = $this->getArgument(1);
         foreach ($data as $key => $value) {
-            if (!isset($hashKeys[$key])) {
+            if (! isset($hashKeys[$key])) {
                 continue;
             }
 

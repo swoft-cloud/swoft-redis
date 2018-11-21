@@ -21,11 +21,8 @@ class HashGetAll extends Command
      */
     public function parseResponse($data)
     {
-        if ($data === false) {
-            return false;
-        }
+        $result = array();
 
-        $result = [];
         for ($i = 0; $i < count($data); ++$i) {
             $result[$data[$i]] = $data[++$i];
         }

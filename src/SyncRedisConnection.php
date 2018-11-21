@@ -39,10 +39,6 @@ class SyncRedisConnection extends AbstractRedisConnection
             $redis->setOption(\Redis::OPT_PREFIX, $prefix);
         }
         $this->connection = $redis;
-
-        /** @var RedisPoolConfig $config */
-        $config = $this->getPool()->getPoolConfig();
-        $redis->select($config->getDb());
     }
 
     /**

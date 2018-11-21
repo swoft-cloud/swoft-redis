@@ -95,7 +95,6 @@ class PrefixProcessor implements ProcessorInterface
             'ZADD'             => 'static::first',
             'ZINCRBY'          => 'static::first',
             'ZREM'             => 'static::first',
-            'ZDELETE'          => 'static::first',
             'ZRANGE'           => 'static::first',
             'ZREVRANGE'        => 'static::first',
             'ZRANGEBYSCORE'    => 'static::first',

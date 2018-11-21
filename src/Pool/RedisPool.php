@@ -39,6 +39,9 @@ class RedisPool extends ConnectionPool
             $redis = new SyncRedisConnection($this);
         }
 
+        $dbIndex = $this->poolConfig->getDb();
+        $redis->select($dbIndex);
+
         return $redis;
     }
 }

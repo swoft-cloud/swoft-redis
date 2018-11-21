@@ -7,12 +7,12 @@ use Swoft\Redis\Operator\Command;
 class KeyPreciseExpire extends Command
 {
     /**
-     * [Keys] pexpire
+     * [Keys] pexipre
      *
      * @return string
      */
     public function getId()
     {
-        return 'pexpire';
+        return 'pexipre';
     }
 }
